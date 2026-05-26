@@ -75,4 +75,32 @@ class DashboardController extends Controller
 
         return back()->with('success', 'Status pendaftaran volunteer berhasil diperbarui.');
     }
+
+    public function uploadCertificateTemplate(\Illuminate\Http\Request $request)
+    {
+        $request->validate([
+            'certificate_template' => ['required', 'image', 'max:3072'], // Max 3MB
+        ]);
+
+        if ($request->hasFile('certificate_template')) {
+            // Compress and resize template using ImageHelper
+            $path = \App\Helpers\ImageHelper::compressAndResize(
+                $request->file('certificate_template'),
+                'settings',
+                1920, // Higher resolution for certificate templates (landscape A4)
+                85    // Higher quality to preserve background texture/text sharpness
+            );
+
+            \App\Models\Setting::setValue('certificate_template', $path);
+
+            \App\Models\ActivityLog::record(
+                'UPLOAD_CERTIFICATE_TEMPLATE',
+                "Mengunggah template e-sertifikat baru: {$path}"
+            );
+
+            return back()->with('success', 'Template e-sertifikat baru berhasil diunggah!');
+        }
+
+        return back()->with('error', 'Gagal mengunggah template sertifikat.');
+    }
 }

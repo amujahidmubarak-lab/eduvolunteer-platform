@@ -39,12 +39,14 @@ Route::middleware(['auth', 'role:volunteer'])->prefix('volunteer')->name('volunt
     Route::get('/announcements', [VolunteerController::class, 'announcements'])->name('announcements');
     Route::get('/profile', [VolunteerController::class, 'profile'])->name('profile');
     Route::post('/profile', [VolunteerController::class, 'updateProfile'])->name('profile.update');
+    Route::get('/certificate', [VolunteerController::class, 'showCertificate'])->name('certificate');
 });
 
 // Admin Routes
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/settings/toggle-registration', [DashboardController::class, 'toggleRegistration'])->name('settings.toggle-registration');
+    Route::post('/settings/certificate-template', [DashboardController::class, 'uploadCertificateTemplate'])->name('settings.certificate-template');
 
     Route::get('/volunteers', [AdminVolunteerController::class, 'index'])->name('volunteers');
     Route::get('/volunteers/{volunteer}', [AdminVolunteerController::class, 'show'])->name('volunteers.show');

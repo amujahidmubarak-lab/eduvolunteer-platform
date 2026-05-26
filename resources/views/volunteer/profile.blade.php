@@ -102,6 +102,63 @@
         </form>
     </div>
 
+    <!-- Card E-Sertifikat -->
+    <div class="bg-white p-8 sm:p-12 rounded-3xl border border-gray-100 shadow-sm space-y-6">
+        <div>
+            <h3 class="font-poppins font-bold text-gray-900 text-xl mb-1 flex items-center gap-2">
+                <i data-lucide="award" class="w-5 h-5 text-blue-600"></i>
+                <span>E-Sertifikat Penghargaan</span>
+            </h3>
+            <p class="text-xs text-gray-500">Sertifikat resmi atas kontribusi pengabdian Anda di Malang Mengajar.</p>
+        </div>
+
+        @php
+            $percentage = min(100, ($attendanceCount / $minAttendance) * 100);
+            $isEligible = $attendanceCount >= $minAttendance;
+        @endphp
+
+        <div class="space-y-4">
+            <!-- Progress Bar -->
+            <div class="space-y-2">
+                <div class="flex justify-between text-xs font-semibold">
+                    <span class="text-gray-500">Progres Kehadiran Mengajar</span>
+                    <span class="text-blue-600">{{ $attendanceCount }} / {{ $minAttendance }} Sesi</span>
+                </div>
+                <div class="w-full bg-gray-100 h-3 rounded-full overflow-hidden">
+                    <div class="bg-blue-600 h-full rounded-full transition-all duration-500" style="width: {{ $percentage }}%"></div>
+                </div>
+            </div>
+
+            @if($isEligible)
+                <div class="p-4 bg-green-50 border border-green-200 rounded-2xl flex items-start gap-3">
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600 shrink-0 mt-0.5"></i>
+                    <div>
+                        <p class="text-xs font-bold text-green-800">Selamat! Kuota Mengajar Terpenuhi</p>
+                        <p class="text-[11px] text-green-600 mt-0.5">Anda berhak mengunduh sertifikat penghargaan atas partisipasi aktif Anda.</p>
+                    </div>
+                </div>
+                
+                <a href="{{ route('volunteer.certificate') }}" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3.5 px-6 rounded-2xl shadow-lg shadow-blue-500/25 transition-all hover:shadow-xl hover:-translate-y-0.5">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                    <span>Unduh E-Sertifikat (PDF)</span>
+                </a>
+            @else
+                <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-2xl flex items-start gap-3">
+                    <i data-lucide="lock" class="w-5 h-5 text-yellow-600 shrink-0 mt-0.5"></i>
+                    <div>
+                        <p class="text-xs font-bold text-yellow-800">Sertifikat Belum Tersedia</p>
+                        <p class="text-[11px] text-yellow-600 mt-0.5">Kumpulkan minimal {{ $minAttendance }} kehadiran mengajar untuk mengklaim sertifikat. Kurang {{ $minAttendance - $attendanceCount }} kehadiran lagi.</p>
+                    </div>
+                </div>
+
+                <button disabled class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gray-100 text-gray-400 font-medium py-3.5 px-6 rounded-2xl border border-gray-200 cursor-not-allowed select-none">
+                    <i data-lucide="lock" class="w-4 h-4"></i>
+                    <span>Unduh E-Sertifikat (PDF)</span>
+                </button>
+            @endif
+        </div>
+    </div>
+
     <!-- Card Ubah Password -->
     <div class="bg-white p-8 sm:p-12 rounded-3xl border border-gray-100 shadow-sm space-y-8">
         <div>

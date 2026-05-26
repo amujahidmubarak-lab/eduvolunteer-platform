@@ -219,6 +219,68 @@
             </div>
         </div>
     </div>
+
+    <!-- E-Certificate Settings -->
+    <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm space-y-6">
+        <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+            <div>
+                <h3 class="font-poppins font-bold text-gray-900 text-xl flex items-center gap-2">
+                    <i data-lucide="award" class="w-6 h-6 text-blue-600"></i>
+                    <span>Pengaturan E-Sertifikat Relawan</span>
+                </h3>
+                <p class="text-xs text-gray-500 mt-0.5">Unggah desain template sertifikat (A4 Landscape) untuk di-overlay secara dinamis.</p>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-12 gap-8 items-start">
+            <!-- Form Upload -->
+            <div class="md:col-span-5 space-y-4">
+                <form action="{{ route('admin.settings.certificate-template') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                    @csrf
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pilih File Template (JPG/PNG)</label>
+                        <div class="border-2 border-dashed border-gray-200 rounded-2xl p-6 text-center hover:border-blue-500 transition-colors bg-gray-50/50 relative group">
+                            <input type="file" name="certificate_template" required accept="image/jpeg,image/png"
+                                   class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                            <div class="space-y-2">
+                                <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 mx-auto group-hover:scale-110 transition-transform">
+                                    <i data-lucide="upload-cloud" class="w-6 h-6"></i>
+                                </div>
+                                <div class="text-xs text-gray-600">
+                                    <span class="font-semibold text-blue-600">Klik untuk upload</span> atau drag and drop
+                                </div>
+                                <p class="text-[10px] text-gray-400">Rasio A4 Landscape (Maks. 3MB)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-poppins font-bold text-sm py-3.5 px-6 rounded-2xl shadow-lg shadow-blue-500/20 transition-all hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                        <span>Simpan Template Baru</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Preview Active Template -->
+            <div class="md:col-span-7 space-y-2">
+                <span class="block text-sm font-semibold text-gray-700">Preview Template Aktif</span>
+                @php
+                    $templatePath = \App\Models\Setting::getValue('certificate_template');
+                @endphp
+                @if($templatePath)
+                    <div class="relative rounded-2xl overflow-hidden border border-gray-200 bg-gray-50 aspect-[1.414/1] shadow-sm max-w-md mx-auto">
+                        <img src="{{ url($templatePath) }}" alt="Template Sertifikat" class="w-full h-full object-cover">
+                    </div>
+                @else
+                    <div class="flex flex-col items-center justify-center border border-dashed border-gray-200 rounded-2xl p-12 bg-gray-50 aspect-[1.414/1] text-gray-400 max-w-md mx-auto">
+                        <i data-lucide="image-off" class="w-12 h-12 mb-3 text-gray-300"></i>
+                        <p class="text-xs font-semibold">Belum ada template kustom yang diunggah.</p>
+                        <p class="text-[10px] text-gray-400 mt-1">Sistem akan menggunakan layout background default.</p>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

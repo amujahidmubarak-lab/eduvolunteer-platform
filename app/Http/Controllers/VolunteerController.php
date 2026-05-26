@@ -135,7 +135,14 @@ class VolunteerController extends Controller
     public function profile()
     {
         $user = Auth::user()->load('volunteerProfile');
-        return view('volunteer.profile', compact('user'));
+        
+        $attendanceCount = \App\Models\ScheduleVolunteer::where('user_id', $user->id)
+            ->where('attendance_status', 'present')
+            ->count();
+
+        $minAttendance = (int) \App\Models\Setting::getValue('certificate_min_attendance', 5);
+
+        return view('volunteer.profile', compact('user', 'attendanceCount', 'minAttendance'));
     }
 
     public function updateProfile(Request $request)
@@ -255,5 +262,26 @@ class VolunteerController extends Controller
         $pivot->update(['attendance_status' => 'present']);
         \App\Models\ActivityLog::record('VOLUNTEER_ATTENDANCE', "Relawan {$user->name} hadir pada jadwal mengajar {$schedule->subject}");
         return redirect()->route('volunteer.schedules')->with('success', 'Presensi kehadiran berhasil dicatat!');
+    }
+
+    public function showCertificate()
+    {
+        $user = Auth::user();
+        
+        $attendanceCount = \App\Models\ScheduleVolunteer::where('user_id', $user->id)
+            ->where('attendance_status', 'present')
+            ->count();
+
+        $minAttendance = (int) \App\Models\Setting::getValue('certificate_min_attendance', 5);
+
+        if ($attendanceCount < $minAttendance) {
+            return redirect('/volunteer/profile')->with('error', "Anda belum memenuhi kuota kehadiran untuk mengunduh sertifikat. Kehadiran saat ini: {$attendanceCount}/{$minAttendance} sesi.");
+        }
+
+        $templatePath = \App\Models\Setting::getValue('certificate_template');
+
+        $verificationUrl = route('landing') . '/verify-certificate/' . $user->id . '/' . md5($user->email . 'MM_CERT_SALT');
+
+        return view('volunteer.certificate', compact('user', 'templatePath', 'verificationUrl', 'attendanceCount'));
     }
 }
