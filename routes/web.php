@@ -51,6 +51,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/volunteers', [AdminVolunteerController::class, 'index'])->name('volunteers');
     Route::get('/volunteers/{volunteer}', [AdminVolunteerController::class, 'show'])->name('volunteers.show');
     Route::patch('/volunteers/{volunteer}/status', [AdminVolunteerController::class, 'updateStatus'])->name('volunteers.updateStatus');
+    Route::delete('/volunteers/{volunteer}', [AdminVolunteerController::class, 'destroy'])->name('volunteers.destroy');
 
     Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules');
     Route::post('/schedules', [ScheduleController::class, 'store'])->name('schedules.store');

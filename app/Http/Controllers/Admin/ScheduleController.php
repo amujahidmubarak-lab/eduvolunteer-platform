@@ -13,10 +13,22 @@ class ScheduleController extends Controller
     public function index()
     {
         $schedules = TeachingSchedule::with('learningHome', 'volunteers')->orderBy('schedule_date', 'desc')->paginate(15);
-        $learningHomes = LearningHome::all();
+        $learningHomes = LearningHome::orderBy('name')->get();
         $volunteers = User::where('role', 'volunteer')->where('status', 'approved')->with('volunteerProfile')->get();
 
-        return view('admin.schedules', compact('schedules', 'learningHomes', 'volunteers'));
+        $allSchedules = TeachingSchedule::with('learningHome')->get();
+        $calendarEvents = $allSchedules->map(function ($schedule) {
+            $learningHomeName = $schedule->learningHome ? $schedule->learningHome->name : 'Rumah Belajar Terhapus';
+            return [
+                'id' => $schedule->id,
+                'title' => $schedule->subject . ' (' . $learningHomeName . ')',
+                'start' => $schedule->schedule_date->format('Y-m-d') . 'T' . $schedule->start_time,
+                'end' => $schedule->schedule_date->format('Y-m-d') . 'T' . $schedule->end_time,
+                'color' => $schedule->status === 'completed' ? '#10B981' : '#3B82F6', // Emerald for completed, Blue for scheduled
+            ];
+        });
+
+        return view('admin.schedules', compact('schedules', 'learningHomes', 'volunteers', 'calendarEvents'));
     }
 
     public function store(Request $request)

@@ -4,7 +4,7 @@
 @section('dashboard_title', 'Manajemen Jadwal Mengajar')
 
 @section('dashboard_content')
-<div x-data="{ showModal: false }" class="space-y-8">
+<div x-data="{ showModal: false, view: 'calendar' }" class="space-y-8">
     <!-- Header & Action Button -->
     <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
@@ -121,8 +121,23 @@
         </div>
     </div>
 
-    <!-- Schedules Grid -->
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Tabs -->
+    <div class="flex items-center gap-4 border-b border-gray-100">
+        <button @click="view = 'calendar'" :class="view === 'calendar' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-3 font-semibold text-sm border-b-2 transition-colors flex items-center gap-2">
+            <i data-lucide="calendar" class="w-4 h-4"></i> Kalender
+        </button>
+        <button @click="view = 'list'" :class="view === 'list' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="px-4 py-3 font-semibold text-sm border-b-2 transition-colors flex items-center gap-2">
+            <i data-lucide="list" class="w-4 h-4"></i> Daftar Jadwal
+        </button>
+    </div>
+
+    <!-- Calendar View -->
+    <div x-show="view === 'calendar'" class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+        <div id="calendar" class="min-h-[600px]"></div>
+    </div>
+
+    <!-- Schedules Grid View -->
+    <div x-show="view === 'list'" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" x-cloak>
         @forelse($schedules as $schedule)
             <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 flex flex-col justify-between gap-6 hover:shadow-md transition-all group">
                 <div class="space-y-4">
@@ -145,11 +160,11 @@
                     <!-- Rumah Belajar Info -->
                     <div>
                         <h4 class="font-poppins font-bold text-gray-900 text-lg group-hover:text-blue-600 transition-colors mb-1">
-                            {{ $schedule->learningHome->name }}
+                            {{ $schedule->learningHome->name ?? 'Rumah Belajar Terhapus' }}
                         </h4>
                         <p class="text-xs text-gray-500 flex items-start gap-1.5 leading-relaxed">
                             <i data-lucide="map-pin" class="w-4 h-4 text-gray-400 shrink-0 mt-0.5"></i>
-                            <span>{{ $schedule->learningHome->address }}</span>
+                            <span>{{ $schedule->learningHome->address ?? 'Alamat tidak tersedia' }}</span>
                         </p>
                     </div>
 
@@ -235,5 +250,51 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var events = @json($calendarEvents);
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,listWeek'
+            },
+            themeSystem: 'standard',
+            events: events,
+            eventClick: function(info) {
+                // Could open a modal or alert
+            },
+            height: 'auto',
+        });
+
+        // Initialize calendar when Alpine renders it
+        let initialized = false;
+        document.addEventListener('alpine:initialized', () => {
+            const el = document.querySelector('[x-data]');
+            if (el) {
+                Alpine.effect(() => {
+                    const view = Alpine.$data(el).view;
+                    if (view === 'calendar' && !initialized) {
+                        setTimeout(() => {
+                            calendar.render();
+                            initialized = true;
+                        }, 50);
+                    } else if (view === 'calendar' && initialized) {
+                        setTimeout(() => {
+                            calendar.updateSize();
+                        }, 50);
+                    }
+                });
+            }
+        });
+    });
+</script>
+@endpush
 
 

@@ -84,6 +84,13 @@
                         Lihat Detail
                     </a>
 
+                    <form action="{{ url('/admin/volunteers/' . $volunteer->id) }}" method="POST" class="shrink-0" onsubmit="return confirm('Apakah Anda yakin ingin menghapus volunteer {{ $volunteer->name }}?')">
+                        @csrf @method('DELETE')
+                        <button type="submit" title="Hapus" class="p-2.5 bg-red-50 hover:bg-red-600 text-red-600 hover:text-white rounded-xl transition-colors border border-red-200">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </form>
+
                     @if($volunteer->status === 'pending')
                         <div class="flex items-center gap-1.5 shrink-0">
                             <form action="{{ url('/admin/volunteers/' . $volunteer->id . '/status') }}" method="POST">

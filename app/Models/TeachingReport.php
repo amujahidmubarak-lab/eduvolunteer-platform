@@ -18,11 +18,11 @@ class TeachingReport extends Model
 
     public function teachingSchedule()
     {
-        return $this->belongsTo(TeachingSchedule::class);
+        return $this->belongsTo(TeachingSchedule::class)->withTrashed();
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
 }

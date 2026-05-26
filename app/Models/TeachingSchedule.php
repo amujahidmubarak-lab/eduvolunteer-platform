@@ -38,7 +38,7 @@ class TeachingSchedule extends Model
 
     public function learningHome()
     {
-        return $this->belongsTo(LearningHome::class);
+        return $this->belongsTo(LearningHome::class)->withTrashed();
     }
 
     public function scheduleVolunteers()

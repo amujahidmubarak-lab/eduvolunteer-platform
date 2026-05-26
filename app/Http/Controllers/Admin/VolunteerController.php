@@ -46,4 +46,15 @@ class VolunteerController extends Controller
 
         return back()->with('success', "Status volunteer {$volunteer->name} berhasil diubah menjadi {$statusText}.");
     }
+
+    public function destroy(User $volunteer)
+    {
+        $volunteerName = $volunteer->name;
+        $volunteer->delete();
+
+        // Catat aktivitas
+        \App\Models\ActivityLog::record('DELETE_VOLUNTEER', "Menghapus akun relawan {$volunteerName} (Soft Delete)");
+
+        return redirect()->route('admin.volunteers')->with('success', "Akun relawan {$volunteerName} berhasil dihapus.");
+    }
 }

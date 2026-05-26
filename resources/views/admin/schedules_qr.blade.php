@@ -20,7 +20,7 @@
 
         <h2 class="text-2xl font-bold font-poppins text-gray-900 mb-2">Scan untuk Presensi</h2>
         <p class="text-gray-500 text-sm mb-8">
-            {{ $schedule->subject }} • {{ $schedule->learningHome->name }}<br>
+            {{ $schedule->subject }} • {{ $schedule->learningHome->name ?? 'Rumah Belajar Terhapus' }}<br>
             Tanggal: {{ \Carbon\Carbon::parse($schedule->schedule_date)->translatedFormat('l, d F Y') }}<br>
             Pukul: {{ $schedule->start_time }} - {{ $schedule->end_time }}
         </p>

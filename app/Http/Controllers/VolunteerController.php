@@ -44,7 +44,18 @@ class VolunteerController extends Controller
         $schedules = TeachingSchedule::with('learningHome', 'volunteers')->orderBy('schedule_date', 'desc')->get();
         $myScheduleIds = Auth::user()->scheduleVolunteers()->pluck('teaching_schedule_id')->toArray();
 
-        return view('volunteer.schedules', compact('schedules', 'myScheduleIds'));
+        $calendarEvents = $schedules->map(function ($schedule) use ($myScheduleIds) {
+            $isMine = in_array($schedule->id, $myScheduleIds);
+            return [
+                'id' => $schedule->id,
+                'title' => $schedule->subject . ' (' . $schedule->learningHome->name . ')',
+                'start' => $schedule->schedule_date->format('Y-m-d') . 'T' . $schedule->start_time,
+                'end' => $schedule->schedule_date->format('Y-m-d') . 'T' . $schedule->end_time,
+                'color' => $isMine ? '#3B82F6' : '#9CA3AF', // Blue for mine, Gray for others
+            ];
+        });
+
+        return view('volunteer.schedules', compact('schedules', 'myScheduleIds', 'calendarEvents'));
     }
 
     public function reports()
