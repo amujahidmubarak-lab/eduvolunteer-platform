@@ -15,6 +15,8 @@ class LearningHome extends Model
         'pic_name',
         'contact_number',
         'student_count',
+        'latitude',
+        'longitude',
     ];
 
     public function teachingSchedules()

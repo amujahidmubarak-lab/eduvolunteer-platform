@@ -30,11 +30,12 @@ Route::middleware(['auth'])->group(function () {
 // Volunteer Routes
 Route::middleware(['auth', 'role:volunteer'])->prefix('volunteer')->name('volunteer.')->group(function () {
     Route::get('/dashboard', [VolunteerController::class, 'dashboard'])->name('dashboard');
-    Route::get('/attend/{schedule}/{token}', [VolunteerController::class, 'attend'])->name('attend');
+    Route::get('/attend/{schedule}/{token}', [VolunteerController::class, 'showAttend'])->name('attend.show');
+    Route::post('/attend/{schedule}/{token}', [VolunteerController::class, 'processAttend'])->name('attend.process');
     Route::get('/schedules', [VolunteerController::class, 'schedules'])->name('schedules');
     Route::get('/reports', [VolunteerController::class, 'reports'])->name('reports');
     Route::get('/reports/create', [VolunteerController::class, 'createReport'])->name('reports.create');
-    Route::post('/reports', [VolunteerController::class, 'storeReport'])->name('reports.store');
+    Route::post('/reports', [VolunteerController::class, 'storeReport'])->name('reports.store')->middleware('throttle:3,1');
     Route::get('/announcements', [VolunteerController::class, 'announcements'])->name('announcements');
     Route::get('/profile', [VolunteerController::class, 'profile'])->name('profile');
     Route::post('/profile', [VolunteerController::class, 'updateProfile'])->name('profile.update');

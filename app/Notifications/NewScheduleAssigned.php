@@ -28,7 +28,7 @@ class NewScheduleAssigned extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -37,9 +37,15 @@ class NewScheduleAssigned extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+            ->subject('Tugas Mengajar Baru - Malang Mengajar')
+            ->greeting('Halo, ' . $notifiable->name . '!')
+            ->line('Anda telah ditugaskan untuk mengajar pada jadwal baru:')
+            ->line('• Mata Pelajaran: ' . $this->schedule->subject)
+            ->line('• Rumah Belajar: ' . ($this->schedule->learningHome->name ?? '-'))
+            ->line('• Tanggal: ' . ($this->schedule->schedule_date ? $this->schedule->schedule_date->translatedFormat('l, d F Y') : '-'))
+            ->line('• Jam: ' . $this->schedule->start_time . ' - ' . $this->schedule->end_time . ' WIB')
+            ->action('Lihat Jadwal Saya', url('/volunteer/schedules'))
+            ->line('Terima kasih atas dedikasi dan kontribusi Anda bagi pendidikan anak-anak di Malang!');
     }
 
     /**
@@ -51,7 +57,7 @@ class NewScheduleAssigned extends Notification
     {
         return [
             'title' => 'Tugas Mengajar Baru',
-            'message' => "Anda telah ditugaskan untuk mengajar pada {$this->schedule->teaching_date} di Rumah Belajar.",
+            'message' => "Anda telah ditugaskan untuk mengajar {$this->schedule->subject} di " . ($this->schedule->learningHome->name ?? 'Rumah Belajar') . " pada " . ($this->schedule->schedule_date ? $this->schedule->schedule_date->translatedFormat('d F Y') : ''),
             'action_url' => url('/volunteer/schedules')
         ];
     }

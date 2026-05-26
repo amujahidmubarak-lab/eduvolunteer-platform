@@ -171,16 +171,15 @@ class VolunteerController extends Controller
         return redirect('/volunteer/profile')->with('success', 'Profil berhasil diperbarui.');
     }
 
-    public function attend(Request $request, $scheduleId, $token)
+    public function showAttend($scheduleId, $token)
     {
-        $schedule = TeachingSchedule::findOrFail($scheduleId);
+        $schedule = TeachingSchedule::with('learningHome')->findOrFail($scheduleId);
 
         if ($schedule->attendance_token !== $token) {
             abort(403, 'Token presensi tidak valid atau telah kedaluwarsa.');
         }
 
         $user = Auth::user();
-        
         $pivot = \App\Models\ScheduleVolunteer::where('teaching_schedule_id', $schedule->id)
             ->where('user_id', $user->id)
             ->first();
@@ -193,11 +192,68 @@ class VolunteerController extends Controller
             return redirect()->route('volunteer.schedules')->with('info', 'Anda sudah melakukan presensi kehadiran sebelumnya.');
         }
 
+        return view('volunteer.attend', compact('schedule', 'token'));
+    }
+
+    public function processAttend(Request $request, $scheduleId, $token)
+    {
+        $schedule = TeachingSchedule::with('learningHome')->findOrFail($scheduleId);
+
+        if ($schedule->attendance_token !== $token) {
+            abort(403, 'Token presensi tidak valid atau telah kedaluwarsa.');
+        }
+
+        $user = Auth::user();
+        $pivot = \App\Models\ScheduleVolunteer::where('teaching_schedule_id', $schedule->id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (!$pivot) {
+            return redirect()->route('volunteer.schedules')->with('error', 'Anda tidak ditugaskan pada jadwal mengajar ini.');
+        }
+
+        if ($pivot->attendance_status === 'present') {
+            return redirect()->route('volunteer.schedules')->with('info', 'Anda sudah melakukan presensi kehadiran sebelumnya.');
+        }
+
+        $request->validate([
+            'latitude' => ['required', 'numeric'],
+            'longitude' => ['required', 'numeric'],
+        ]);
+
+        $home = $schedule->learningHome;
+        if (!$home || is_null($home->latitude) || is_null($home->longitude)) {
+            return $this->markPresent($pivot, $user, $schedule);
+        }
+
+        $lat1 = $request->latitude;
+        $lon1 = $request->longitude;
+        $lat2 = $home->latitude;
+        $lon2 = $home->longitude;
+
+        // Haversine Formula (Meters)
+        $earthRadius = 6371000;
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+
+        $a = sin($dLat / 2) * sin($dLat / 2) +
+             cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+             sin($dLon / 2) * sin($dLon / 2);
+
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+        $distance = $earthRadius * $c;
+
+        if ($distance > 100) {
+            return redirect()->route('volunteer.schedules')->with('error', 'Presensi gagal! Anda berada sekitar ' . round($distance) . ' meter dari lokasi Rumah Belajar. Jarak maksimal adalah 100 meter.');
+        }
+
+        return $this->markPresent($pivot, $user, $schedule);
+    }
+
+    private function markPresent($pivot, $user, $schedule)
+    {
         $pivot->update(['attendance_status' => 'present']);
-
-        // Log the activity automatically for the user
         \App\Models\ActivityLog::record('VOLUNTEER_ATTENDANCE', "Relawan {$user->name} hadir pada jadwal mengajar {$schedule->subject}");
-
-        return redirect()->route('volunteer.schedules')->with('success', 'Presensi berhasil! Terima kasih telah hadir.');
+        return redirect()->route('volunteer.schedules')->with('success', 'Presensi kehadiran berhasil dicatat!');
     }
 }

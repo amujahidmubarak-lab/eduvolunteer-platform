@@ -28,7 +28,7 @@ class VolunteerStatusUpdated extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -36,10 +36,24 @@ class VolunteerStatusUpdated extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+        $statusText = $this->status === 'approved' ? 'DISETUJUI' : ($this->status === 'rejected' ? 'DITOLAK' : 'DIPERBARUI');
+        
+        $message = (new MailMessage)
+            ->subject('Pembaruan Status Akun - Malang Mengajar')
+            ->greeting('Halo, ' . $notifiable->name . '!');
+
+        if ($this->status === 'approved') {
+            $message->line('Selamat! Pendaftaran Anda sebagai relawan Malang Mengajar telah disetujui oleh Admin.')
+                    ->line('Sekarang Anda dapat masuk ke Dashboard untuk melihat jadwal mengajar yang ditugaskan.')
+                    ->action('Buka Dashboard', url('/volunteer/dashboard'));
+        } elseif ($this->status === 'rejected') {
+            $message->line('Mohon maaf, pendaftaran Anda sebagai relawan Malang Mengajar belum dapat disetujui saat ini.')
+                    ->line('Terima kasih banyak atas minat Anda untuk berpartisipasi.');
+        } else {
+            $message->line("Status pendaftaran relawan Anda telah diperbarui menjadi: " . strtoupper($this->status));
+        }
+
+        return $message->line('Terima kasih atas perhatian Anda!');
     }
 
     /**
