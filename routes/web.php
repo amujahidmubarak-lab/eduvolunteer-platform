@@ -24,6 +24,7 @@ Route::post('/register', [AuthController::class, 'register'])->middleware('throt
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/notifications/mark-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
+    Route::post('/profile/password', [AuthController::class, 'updatePassword'])->name('profile.password');
 });
 
 // Volunteer Routes
@@ -42,6 +43,7 @@ Route::middleware(['auth', 'role:volunteer'])->prefix('volunteer')->name('volunt
 // Admin Routes
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/settings/toggle-registration', [DashboardController::class, 'toggleRegistration'])->name('settings.toggle-registration');
 
     Route::get('/volunteers', [AdminVolunteerController::class, 'index'])->name('volunteers');
     Route::get('/volunteers/{volunteer}', [AdminVolunteerController::class, 'show'])->name('volunteers.show');

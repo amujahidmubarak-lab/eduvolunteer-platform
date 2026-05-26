@@ -19,7 +19,21 @@
                 Kelola pendaftaran relawan, alokasi jadwal mengajar di rumah belajar, serta pantau laporan kegiatan dan dampak sosial secara real-time.
             </p>
         </div>
-        <div class="relative z-10 flex flex-col gap-3 w-full sm:w-auto shrink-0">
+        <div class="relative z-10 flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto shrink-0">
+            @php
+                $regOpen = \App\Models\Setting::getValue('registration_status', 'open') === 'open';
+            @endphp
+            <form action="{{ route('admin.settings.toggle-registration') }}" method="POST" class="w-full sm:w-auto">
+                @csrf
+                <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 font-poppins font-bold text-sm px-6 py-3.5 rounded-2xl transition-all border shadow-lg hover:-translate-y-0.5
+                    {{ $regOpen 
+                        ? 'bg-emerald-500 hover:bg-emerald-600 text-white border-emerald-400 shadow-emerald-500/20' 
+                        : 'bg-rose-500 hover:bg-rose-600 text-white border-rose-400 shadow-rose-500/20' }}">
+                    <i data-lucide="{{ $regOpen ? 'unlock' : 'lock' }}" class="w-5 h-5"></i>
+                    <span>Pendaftaran: {{ $regOpen ? 'DIBUKA' : 'DITUTUP' }}</span>
+                </button>
+            </form>
+
             <a href="{{ url('/admin/schedules') }}" class="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-poppins font-bold text-sm px-6 py-3.5 rounded-2xl shadow-lg shadow-yellow-500/30 transition-all hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2">
                 <i data-lucide="plus-circle" class="w-5 h-5"></i>
                 <span>Buat Jadwal Baru</span>

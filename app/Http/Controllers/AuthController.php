@@ -45,11 +45,20 @@ class AuthController extends Controller
         if (Auth::check()) {
             return Auth::user()->role === 'admin' ? redirect('/admin/dashboard') : redirect('/volunteer/dashboard');
         }
+
+        if (\App\Models\Setting::getValue('registration_status', 'open') !== 'open') {
+            return redirect()->route('landing')->with('error', 'Mohon maaf, pendaftaran volunteer saat ini sedang ditutup.');
+        }
+
         return view('auth.register');
     }
 
     public function register(Request $request)
     {
+        if (\App\Models\Setting::getValue('registration_status', 'open') !== 'open') {
+            return redirect()->route('landing')->with('error', 'Mohon maaf, pendaftaran volunteer saat ini sedang ditutup.');
+        }
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -60,12 +69,12 @@ class AuthController extends Controller
             'interested_subjects' => ['required', 'string'],
             'availability' => ['required', 'string', 'max:255'],
             'motivation' => ['required', 'string'],
-            'ktm_photo' => ['nullable', 'image', 'max:5120'], // max 5MB
+            'ktm_photo' => ['nullable', 'image', 'max:2048'], // max 2MB
         ]);
 
         $ktmPath = null;
         if ($request->hasFile('ktm_photo')) {
-            $ktmPath = $request->file('ktm_photo')->store('ktm', 'public');
+            $ktmPath = \App\Helpers\ImageHelper::compressAndResize($request->file('ktm_photo'), 'ktm');
         } else {
             // Fallback default image if no file uploaded
             $ktmPath = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80';
@@ -103,5 +112,27 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/')->with('success', 'Anda telah berhasil logout.');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user = Auth::user();
+
+        if (!\Illuminate\Support\Facades\Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Password lama yang Anda masukkan salah.']);
+        }
+
+        $user->update([
+            'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+        ]);
+
+        \App\Models\ActivityLog::record('CHANGE_PASSWORD', "Pengguna {$user->name} memperbarui kata sandi");
+
+        return back()->with('success', 'Kata sandi berhasil diperbarui.');
     }
 }

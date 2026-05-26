@@ -77,7 +77,7 @@ class VolunteerController extends Controller
             'student_count' => ['required', 'integer', 'min:1'],
             'obstacles' => ['nullable', 'string'],
             'evaluation' => ['nullable', 'string'],
-            'documentation_photo' => ['nullable', 'image', 'max:5120'],
+            'documentation_photo' => ['nullable', 'image', 'max:3072'], // max 3MB
         ]);
 
         $user = Auth::user();
@@ -104,7 +104,7 @@ class VolunteerController extends Controller
 
         $photoPath = null;
         if ($request->hasFile('documentation_photo')) {
-            $photoPath = $request->file('documentation_photo')->store('reports', 'public');
+            $photoPath = \App\Helpers\ImageHelper::compressAndResize($request->file('documentation_photo'), 'reports');
         } else {
             $photoPath = 'https://images.unsplash.com/photo-1577896851231-70ef18881754?w=600&auto=format&fit=crop&q=80';
         }

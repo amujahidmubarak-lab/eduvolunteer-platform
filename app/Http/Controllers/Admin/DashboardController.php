@@ -60,4 +60,19 @@ class DashboardController extends Controller
 
         return view('admin.dashboard', compact('stats', 'pendingVolunteers', 'recentReports', 'chartData'));
     }
+
+    public function toggleRegistration()
+    {
+        $currentStatus = \App\Models\Setting::getValue('registration_status', 'open');
+        $newStatus = $currentStatus === 'open' ? 'closed' : 'open';
+        
+        \App\Models\Setting::setValue('registration_status', $newStatus);
+
+        \App\Models\ActivityLog::record(
+            'TOGGLE_REGISTRATION', 
+            "Mengubah status pendaftaran volunteer menjadi " . ($newStatus === 'open' ? 'DIBUKA' : 'DITUTUP')
+        );
+
+        return back()->with('success', 'Status pendaftaran volunteer berhasil diperbarui.');
+    }
 }

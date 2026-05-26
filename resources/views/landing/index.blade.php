@@ -46,9 +46,15 @@
                 </form>
             @else
                 <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors px-3 py-2">Masuk</a>
-                <a href="{{ route('register') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-5 py-2.5 rounded-xl shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:-translate-y-0.5">
-                    Daftar Volunteer
-                </a>
+                @if(\App\Models\Setting::getValue('registration_status', 'open') === 'open')
+                    <a href="{{ route('register') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-5 py-2.5 rounded-xl shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:-translate-y-0.5">
+                        Daftar Volunteer
+                    </a>
+                @else
+                    <span class="bg-gray-100 text-gray-400 font-medium text-sm px-5 py-2.5 rounded-xl border border-gray-200 cursor-not-allowed select-none">
+                        Pendaftaran Ditutup
+                    </span>
+                @endif
             @endauth
         </div>
 
@@ -79,7 +85,11 @@
                 </form>
             @else
                 <a href="{{ route('login') }}" class="w-full text-center border border-gray-300 text-gray-700 font-medium py-3 rounded-xl hover:bg-gray-50">Masuk</a>
-                <a href="{{ route('register') }}" class="w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-xl shadow-md">Daftar Volunteer</a>
+                @if(\App\Models\Setting::getValue('registration_status', 'open') === 'open')
+                    <a href="{{ route('register') }}" class="w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-xl shadow-md">Daftar Volunteer</a>
+                @else
+                    <span class="w-full text-center bg-gray-100 text-gray-400 font-medium py-3 rounded-xl border border-gray-200 select-none">Pendaftaran Ditutup</span>
+                @endif
             @endauth
         </div>
     </div>
@@ -110,9 +120,15 @@
                             Buka Dashboard
                         </a>
                     @else
-                        <a href="{{ route('register') }}" class="w-full sm:w-auto text-center bg-blue-600 hover:bg-blue-700 text-white font-medium text-base px-8 py-4 rounded-2xl shadow-lg shadow-blue-500/25 transition-all hover:shadow-xl hover:-translate-y-0.5">
-                            Daftar Volunteer Sekarang
-                        </a>
+                        @if(\App\Models\Setting::getValue('registration_status', 'open') === 'open')
+                            <a href="{{ route('register') }}" class="w-full sm:w-auto text-center bg-blue-600 hover:bg-blue-700 text-white font-medium text-base px-8 py-4 rounded-2xl shadow-lg shadow-blue-500/25 transition-all hover:shadow-xl hover:-translate-y-0.5">
+                                Daftar Volunteer Sekarang
+                            </a>
+                        @else
+                            <span class="w-full sm:w-auto text-center bg-gray-100 text-gray-400 font-medium text-base px-8 py-4 rounded-2xl border border-gray-200 select-none cursor-not-allowed">
+                                Pendaftaran Ditutup
+                            </span>
+                        @endif
                         <a href="#tentang" class="w-full sm:w-auto text-center bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 font-medium text-base px-8 py-4 rounded-2xl transition-all hover:shadow-sm">
                             Pelajari Program
                         </a>

@@ -101,5 +101,50 @@
             </div>
         </form>
     </div>
+
+    <!-- Card Ubah Password -->
+    <div class="bg-white p-8 sm:p-12 rounded-3xl border border-gray-100 shadow-sm space-y-8">
+        <div>
+            <h3 class="font-poppins font-bold text-gray-900 text-xl mb-1 flex items-center gap-2">
+                <i data-lucide="key-round" class="w-5 h-5 text-blue-600"></i>
+                <span>Ubah Kata Sandi</span>
+            </h3>
+            <p class="text-xs text-gray-500">Amankan akun Anda dengan mengganti kata sandi secara berkala.</p>
+        </div>
+
+        <form action="{{ route('profile.password') }}" method="POST" class="space-y-6">
+            @csrf
+
+            <div class="grid sm:grid-cols-2 gap-6">
+                <!-- Password Lama -->
+                <div class="sm:col-span-2">
+                    <label for="current_password" class="block text-sm font-medium text-gray-700 mb-1">Kata Sandi Lama</label>
+                    <input id="current_password" name="current_password" type="password" required
+                           class="block w-full p-4 border border-gray-200 rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50/50 focus:bg-white transition-all">
+                </div>
+
+                <!-- Password Baru -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Kata Sandi Baru</label>
+                    <input id="password" name="password" type="password" required
+                           class="block w-full p-4 border border-gray-200 rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50/50 focus:bg-white transition-all">
+                </div>
+
+                <!-- Konfirmasi Password Baru -->
+                <div>
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Konfirmasi Kata Sandi Baru</label>
+                    <input id="password_confirmation" name="password_confirmation" type="password" required
+                           class="block w-full p-4 border border-gray-200 rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50/50 focus:bg-white transition-all">
+                </div>
+            </div>
+
+            <div class="pt-4">
+                <button type="submit" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-medium py-4 px-8 rounded-2xl shadow-lg shadow-red-500/25 transition-all hover:shadow-xl hover:-translate-y-0.5">
+                    <span>Perbarui Kata Sandi</span>
+                    <i data-lucide="shield-check" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection
