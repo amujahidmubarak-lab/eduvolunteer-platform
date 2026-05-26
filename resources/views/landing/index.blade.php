@@ -37,6 +37,13 @@
                     <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
                     <span>Dashboard Saya</span>
                 </a>
+                <form action="{{ route('logout') }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="inline-flex items-center gap-2 border border-red-200 hover:bg-red-50 text-red-600 font-medium text-sm px-5 py-2.5 rounded-xl transition-all hover:bg-red-100/50">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                        <span>Keluar</span>
+                    </button>
+                </form>
             @else
                 <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors px-3 py-2">Masuk</a>
                 <a href="{{ route('register') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-5 py-2.5 rounded-xl shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:-translate-y-0.5">
@@ -64,6 +71,12 @@
                 <a href="{{ auth()->user()->role === 'admin' ? url('/admin/dashboard') : url('/volunteer/dashboard') }}" class="w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-xl shadow-md">
                     Dashboard Saya
                 </a>
+                <form action="{{ route('logout') }}" method="POST" class="w-full">
+                    @csrf
+                    <button type="submit" class="w-full text-center border border-red-200 hover:bg-red-50 text-red-600 font-medium py-3 rounded-xl transition-all">
+                        Keluar
+                    </button>
+                </form>
             @else
                 <a href="{{ route('login') }}" class="w-full text-center border border-gray-300 text-gray-700 font-medium py-3 rounded-xl hover:bg-gray-50">Masuk</a>
                 <a href="{{ route('register') }}" class="w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-xl shadow-md">Daftar Volunteer</a>

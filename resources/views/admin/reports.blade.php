@@ -10,8 +10,16 @@
             <h3 class="font-poppins font-bold text-gray-900 text-xl mb-1">Rekapitulasi Laporan Mengajar Volunteer</h3>
             <p class="text-sm text-gray-600">Pantau materi yang diajarkan, jumlah siswa hadir, kendala lapangan, serta saran evaluasi dari para relawan.</p>
         </div>
-        <div class="px-4 py-2 bg-blue-50 text-blue-700 rounded-2xl border border-blue-100 text-xs font-semibold shrink-0">
-            Total: {{ $reports->count() }} Laporan
+        <div class="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+            <div class="px-4 py-2 bg-blue-50 text-blue-700 rounded-2xl border border-blue-100 text-xs font-semibold">
+                Total: {{ $reports->count() }} Laporan
+            </div>
+            @if($reports->count() > 0)
+                <a href="{{ route('admin.reports.export') }}" class="bg-green-600 hover:bg-green-700 text-white font-poppins font-bold text-xs py-2 px-4 rounded-2xl shadow-lg shadow-green-500/25 transition-all hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                    <span>Ekspor CSV</span>
+                </a>
+            @endif
         </div>
     </div>
 
@@ -100,3 +108,5 @@
     </div>
 </div>
 @endsection
+
+

@@ -6,7 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class ScheduleVolunteer extends Model
 {
-    protected $guarded = [];
+    protected $fillable = [
+        'teaching_schedule_id',
+        'user_id',
+        'attendance_status',
+    ];
 
     public function teachingSchedule()
     {

@@ -64,8 +64,43 @@
                 <i data-lucide="file-check-2" class="w-7 h-7"></i>
             </div>
             <div>
-                <h4 class="text-3xl font-bold font-poppins text-gray-900 mb-1">{{ $stats['teaching_reports'] }}</h4>
-                <p class="text-xs font-medium text-gray-500">Laporan Terkumpul</p>
+                <h4 class="text-3xl font-bold font-poppins text-gray-900 mb-1">{{ $stats['impact_hours'] }} <span class="text-lg text-gray-400 font-normal">Jam</span></h4>
+                <p class="text-xs font-medium text-gray-500">Total Jam Dampak</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Impact Analytics Charts -->
+    <div class="grid lg:grid-cols-2 gap-8" x-data="impactAnalytics({{ json_encode($chartData) }})">
+        <!-- Line Chart -->
+        <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm group hover:shadow-md transition-all">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h3 class="font-poppins font-bold text-gray-900 text-xl">Tren Aktivitas Mengajar</h3>
+                    <p class="text-xs text-gray-500 mt-1">Jumlah laporan kegiatan dalam 7 hari terakhir</p>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                    <i data-lucide="trending-up" class="w-5 h-5"></i>
+                </div>
+            </div>
+            <div class="relative h-64 w-full">
+                <canvas x-ref="trendChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Doughnut Chart -->
+        <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm group hover:shadow-md transition-all">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h3 class="font-poppins font-bold text-gray-900 text-xl">Distribusi Siswa</h3>
+                    <p class="text-xs text-gray-500 mt-1">Persebaran jumlah siswa per Rumah Belajar</p>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600">
+                    <i data-lucide="pie-chart" class="w-5 h-5"></i>
+                </div>
+            </div>
+            <div class="relative h-64 w-full flex justify-center">
+                <canvas x-ref="distributionChart"></canvas>
             </div>
         </div>
     </div>
@@ -171,4 +206,74 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('impactAnalytics', (data) => ({
+            init() {
+                const trendCtx = this.$refs.trendChart.getContext('2d');
+                new Chart(trendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: data.trend.labels,
+                        datasets: [{
+                            label: 'Laporan Kegiatan',
+                            data: data.trend.data,
+                            borderColor: '#2563eb', // blue-600
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#ffffff',
+                            pointBorderColor: '#2563eb',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, ticks: { precision: 0 } }
+                        }
+                    }
+                });
+
+                const distCtx = this.$refs.distributionChart.getContext('2d');
+                new Chart(distCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.distribution.labels,
+                        datasets: [{
+                            data: data.distribution.data,
+                            backgroundColor: [
+                                '#3b82f6', // blue-500
+                                '#10b981', // emerald-500
+                                '#f59e0b', // amber-500
+                                '#8b5cf6', // violet-500
+                                '#ec4899', // pink-500
+                                '#06b6d4'  // cyan-500
+                            ],
+                            borderWidth: 0,
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false,
+                        cutout: '65%',
+                        plugins: {
+                            legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } }
+                        }
+                    }
+                });
+            }
+        }));
+    });
+</script>
 @endsection

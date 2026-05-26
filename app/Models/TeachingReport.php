@@ -6,7 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class TeachingReport extends Model
 {
-    protected $guarded = [];
+    protected $fillable = [
+        'teaching_schedule_id',
+        'user_id',
+        'material_taught',
+        'student_count',
+        'obstacles',
+        'evaluation',
+        'photo_path',
+    ];
 
     public function teachingSchedule()
     {

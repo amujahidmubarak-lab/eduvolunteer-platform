@@ -12,7 +12,7 @@
         
         <!-- Sidebar Header -->
         <div class="p-6 border-b border-gray-100 flex items-center justify-between">
-            <a href="{{ url('/') }}" class="flex items-center gap-3 group">
+            <a href="{{ route('landing') }}" class="flex items-center gap-3 group">
                 <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
                     <i data-lucide="book-open" class="w-6 h-6"></i>
                 </div>
@@ -32,53 +32,57 @@
         <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
             @if(auth()->user()->role === 'admin')
                 <!-- Admin Links -->
-                <a href="{{ url('/admin/dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('admin/dashboard') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('admin/dashboard') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                     <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                     <span>Dashboard Admin</span>
                 </a>
-                <a href="{{ url('/admin/volunteers') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('admin/volunteers*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                <a href="{{ route('admin.volunteers') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('admin/volunteers*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                     <i data-lucide="users" class="w-5 h-5"></i>
                     <span>Daftar Volunteer</span>
                 </a>
-                <a href="{{ url('/admin/schedules') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('admin/schedules*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                <a href="{{ route('admin.schedules') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('admin/schedules*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                     <i data-lucide="calendar-days" class="w-5 h-5"></i>
                     <span>Jadwal Mengajar</span>
                 </a>
-                <a href="{{ url('/admin/learning-homes') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('admin/learning-homes*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                <a href="{{ route('admin.learning-homes') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('admin/learning-homes*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                     <i data-lucide="home" class="w-5 h-5"></i>
                     <span>Rumah Belajar</span>
                 </a>
-                <a href="{{ url('/admin/reports') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('admin/reports*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                <a href="{{ route('admin.reports') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('admin/reports*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                     <i data-lucide="file-check-2" class="w-5 h-5"></i>
                     <span>Laporan Kegiatan</span>
                 </a>
-                <a href="{{ url('/admin/announcements') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('admin/announcements*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                <a href="{{ route('admin.announcements') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('admin/announcements*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                     <i data-lucide="bell" class="w-5 h-5"></i>
                     <span>Pengumuman</span>
                 </a>
-                <a href="{{ url('/admin/galleries') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('admin/galleries*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                <a href="{{ route('admin.galleries') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('admin/galleries*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                     <i data-lucide="image" class="w-5 h-5"></i>
                     <span>Galeri Dokumentasi</span>
                 </a>
+                <a href="{{ route('admin.activity-logs') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('admin/activity-logs*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                    <i data-lucide="history" class="w-5 h-5"></i>
+                    <span>Catatan Aktivitas</span>
+                </a>
             @else
                 <!-- Volunteer Links -->
-                <a href="{{ url('/volunteer/dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('volunteer/dashboard') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                <a href="{{ route('volunteer.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('volunteer/dashboard') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                     <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="{{ url('/volunteer/schedules') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('volunteer/schedules*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                <a href="{{ route('volunteer.schedules') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('volunteer/schedules*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                     <i data-lucide="calendar" class="w-5 h-5"></i>
                     <span>Jadwal Saya</span>
                 </a>
-                <a href="{{ url('/volunteer/reports') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('volunteer/reports*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                <a href="{{ route('volunteer.reports') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('volunteer/reports*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                     <i data-lucide="file-text" class="w-5 h-5"></i>
                     <span>Laporan Mengajar</span>
                 </a>
-                <a href="{{ url('/volunteer/announcements') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('volunteer/announcements*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                <a href="{{ route('volunteer.announcements') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('volunteer/announcements*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                     <i data-lucide="bell" class="w-5 h-5"></i>
                     <span>Pengumuman</span>
                 </a>
-                <a href="{{ url('/volunteer/profile') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('volunteer/profile*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                <a href="{{ route('volunteer.profile') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium transition-all {{ request()->is('volunteer/profile*') ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                     <i data-lucide="user" class="w-5 h-5"></i>
                     <span>Profil Saya</span>
                 </a>
@@ -131,10 +135,72 @@
                     </div>
                 @endif
 
-                <a href="{{ url('/') }}" class="hidden sm:inline-flex items-center gap-2 text-xs font-semibold text-gray-600 hover:text-blue-600 bg-gray-100 hover:bg-blue-50 px-4 py-2 rounded-xl transition-colors">
+                <!-- Notification Dropdown -->
+                <div x-data="{ openNotif: false }" class="relative">
+                    <button @click="openNotif = !openNotif" @click.outside="openNotif = false" class="relative p-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors focus:outline-none">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                        @if($unreadNotifications->count() > 0)
+                            <span class="absolute top-1.5 right-1.5 flex h-2.5 w-2.5">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                            </span>
+                        @endif
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div x-show="openNotif" x-transition.origin.top.right x-cloak 
+                         class="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden z-50">
+                        <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+                            <h3 class="font-bold text-gray-900 font-poppins text-sm">Notifikasi</h3>
+                            @if($unreadNotifications->count() > 0)
+                                <form action="{{ url('/notifications/mark-read') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="text-xs font-semibold text-blue-600 hover:text-blue-700">Tandai semua dibaca</button>
+                                </form>
+                            @endif
+                        </div>
+                        <div class="max-h-80 overflow-y-auto">
+                            @forelse($unreadNotifications->take(5) as $notif)
+                                <div class="p-4 border-b border-gray-50 hover:bg-blue-50/50 transition-colors flex gap-3">
+                                    <div class="mt-0.5">
+                                        <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-800 font-medium leading-snug">{{ $notif->data['title'] ?? 'Pemberitahuan Baru' }}</p>
+                                        <p class="text-xs text-gray-500 mt-1 line-clamp-2">{{ $notif->data['message'] ?? '' }}</p>
+                                        <span class="text-[10px] text-gray-400 font-medium block mt-1.5">{{ $notif->created_at->diffForHumans() }}</span>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="p-8 text-center text-gray-500">
+                                    <i data-lucide="bell-off" class="w-8 h-8 mx-auto mb-2 text-gray-300"></i>
+                                    <p class="text-sm font-medium">Belum ada notifikasi baru</p>
+                                </div>
+                            @endforelse
+                        </div>
+                        <div class="p-3 bg-gray-50 text-center border-t border-gray-100">
+                            <a href="#" class="text-xs font-semibold text-gray-500 hover:text-gray-900">Lihat Semua Notifikasi</a>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="{{ route('landing') }}" class="hidden sm:inline-flex items-center gap-2 text-xs font-semibold text-gray-600 hover:text-blue-600 bg-gray-100 hover:bg-blue-50 px-4 py-2 rounded-xl transition-colors">
                     <i data-lucide="external-link" class="w-4 h-4"></i>
                     <span>Lihat Website</span>
                 </a>
+
+                <form action="{{ route('logout') }}" method="POST" class="inline-flex">
+                    @csrf
+                    <!-- Desktop Logout Button -->
+                    <button type="submit" class="hidden sm:inline-flex items-center gap-2 text-xs font-semibold text-red-600 hover:text-red-700 bg-red-50 hover:bg-red-100/80 px-4 py-2 rounded-xl transition-colors">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                        <span>Keluar</span>
+                    </button>
+                    <!-- Mobile Logout Button -->
+                    <button type="submit" title="Logout" class="sm:hidden p-2 rounded-xl text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors">
+                        <i data-lucide="log-out" class="w-5 h-5"></i>
+                    </button>
+                </form>
             </div>
         </header>
 
@@ -145,3 +211,4 @@
     </div>
 </div>
 @endsection
+

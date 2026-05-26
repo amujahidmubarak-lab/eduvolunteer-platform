@@ -212,12 +212,17 @@
                         </form>
                     @endif
 
-                    <form action="{{ url('/admin/schedules/' . $schedule->id) }}" method="POST" class="shrink-0" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?');">
-                        @csrf @method('DELETE')
-                        <button type="submit" title="Hapus Jadwal" class="p-2.5 bg-red-50 hover:bg-red-600 text-red-600 hover:text-white rounded-xl transition-colors border border-red-200">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    </form>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <a href="{{ url('/admin/schedules/' . $schedule->id . '/qr') }}" title="Tampilkan QR Presensi" target="_blank" class="p-2.5 bg-indigo-50 hover:bg-indigo-600 text-indigo-600 hover:text-white rounded-xl transition-colors border border-indigo-200">
+                            <i data-lucide="qr-code" class="w-4 h-4"></i>
+                        </a>
+                        <form action="{{ url('/admin/schedules/' . $schedule->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?');">
+                            @csrf @method('DELETE')
+                            <button type="submit" title="Hapus Jadwal" class="p-2.5 bg-red-50 hover:bg-red-600 text-red-600 hover:text-white rounded-xl transition-colors border border-red-200">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         @empty
@@ -230,3 +235,5 @@
     </div>
 </div>
 @endsection
+
+

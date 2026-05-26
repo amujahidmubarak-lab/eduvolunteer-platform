@@ -9,7 +9,25 @@ class TeachingSchedule extends Model
 {
     use SoftDeletes;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'learning_home_id',
+        'subject',
+        'schedule_date',
+        'start_time',
+        'end_time',
+        'status',
+        'notes',
+        'attendance_token',
+    ];
+
+    protected static function booted()
+    {
+        static::creating(function ($schedule) {
+            if (empty($schedule->attendance_token)) {
+                $schedule->attendance_token = \Illuminate\Support\Str::random(10);
+            }
+        });
+    }
 
     protected function casts(): array
     {

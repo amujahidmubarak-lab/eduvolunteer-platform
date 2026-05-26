@@ -13,12 +13,14 @@ class LandingController extends Controller
 {
     public function index()
     {
-        $stats = [
-            'volunteers' => User::where('role', 'volunteer')->where('status', 'approved')->count(),
-            'students' => LearningHome::sum('student_count'),
-            'learning_homes' => LearningHome::count(),
-            'teaching_schedules' => TeachingSchedule::count(),
-        ];
+        $stats = \Illuminate\Support\Facades\Cache::remember('landing_stats', 300, function () {
+            return [
+                'volunteers' => User::where('role', 'volunteer')->where('status', 'approved')->count(),
+                'students' => LearningHome::sum('student_count'),
+                'learning_homes' => LearningHome::count(),
+                'teaching_schedules' => TeachingSchedule::count(),
+            ];
+        });
 
         $galleries = Gallery::where('is_active', true)->latest()->take(6)->get();
         $announcements = Announcement::where('is_active', true)->latest()->take(3)->get();

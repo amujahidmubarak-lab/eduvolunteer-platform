@@ -9,7 +9,13 @@ class LearningHome extends Model
 {
     use SoftDeletes;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'address',
+        'pic_name',
+        'contact_number',
+        'student_count',
+    ];
 
     public function teachingSchedules()
     {
